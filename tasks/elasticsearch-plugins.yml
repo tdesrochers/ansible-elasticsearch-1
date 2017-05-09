@@ -2,8 +2,7 @@
 
 # es_plugins_reinstall will be set to true if elasticsearch_install_from_repo.changed or elasticsearch_install_from_package.changed
 # i.e. we have changed ES version(or we have clean installation of ES), or if no plugins listed. Otherwise it is false and requires explicitly setting.
-- set_fact: es_plugins_reinstall=true
-  when: (((debian_elasticsearch_install_from_repo is defined and debian_elasticsearch_install_from_repo.changed) or (redhat_elasticsearch_install_from_repo is defined and redhat_elasticsearch_install_from_repo.changed)) or (elasticsearch_install_from_package is defined and elasticsearch_install_from_package.changed)) or es_plugins is not defined or es_plugins is none
+- set_fact: es_plugins_reinstall={{ es_install.changed }}
 
 - set_fact: list_command=""
 #If we are reinstalling all plugins, e.g. to a version change, we need to remove all plugins (inc. x-pack) to install any plugins. Otherwise we don't consider x-pack so the role stays idempotent.
@@ -41,7 +40,13 @@
     ES_INCLUDE: "{{ instance_default_file }}"
 
 - name: Install elasticsearch plugins
-  command: "{{es_home}}/bin/elasticsearch-plugin install {{ item.plugin }} --batch --silent {% if item.proxy_host is defined and item.proxy_host != '' and item.proxy_port is defined and item.proxy_port != ''%} -DproxyHost={{ item.proxy_host }} -DproxyPort={{ item.proxy_port }} {% elif es_proxy_host is defined and es_proxy_host != '' %} -DproxyHost={{ es_proxy_host }} -DproxyPort={{ es_proxy_port }} {% endif %}"
+  shell: >
+    {% if item.proxy_host is defined and item.proxy_host != '' and item.proxy_port is defined and item.proxy_port != ''%}
+    ES_JAVA_OPTS="-DproxyHost={{ item.proxy_host }} -DproxyPort={{ item.proxy_port }}"
+    {% elif es_proxy_host is defined and es_proxy_host != '' %}
+    ES_JAVA_OPTS="-DproxyHost={{ es_proxy_host }} -DproxyPort={{ es_proxy_port }}"
+    {% endif %}"
+    "{{es_home}}/bin/elasticsearch-plugin install {{ item.plugin }} --batch --silent
   register: plugin_installed
   failed_when: "'ERROR' in plugin_installed.stdout"
   changed_when: plugin_installed.rc == 0
