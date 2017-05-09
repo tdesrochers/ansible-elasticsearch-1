@@ -26,3 +26,7 @@
 - set_fact: m_lock_enabled={{ es_config['bootstrap.memory_lock'] is defined and es_config['bootstrap.memory_lock'] == True }}
 
 #TODO - if transport.host is not local maybe error on boostrap checks
+
+- set_fact: instance_default_file={{ default_file }}
+- set_fact: instance_init_script={{ init_script }}
+- set_fact: instance_sysd_script={{ sysd_script }}

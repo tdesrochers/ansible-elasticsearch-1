@@ -31,11 +31,10 @@ es_xpack_features: ["alerting","monitoring","graph","security"]
 es_api_host: "localhost"
 es_api_port: 9200
 
-# Since ansible 2.2 the following variables need to be defined
-# to allow the role to be conditionally played with a when condition.
-pid_dir: ''
-log_dir: ''
-conf_dir: ''
-data_dirs: ''
+# These values get re-written if you set es_use_shared_fs to true
+pid_dir: "{{ es_pid_dir }}"
+log_dir: "{{ es_log_dir }}"
+conf_dir: "{{ es_conf_dir }}"
+data_dirs: "{{ es_data_dirs }}"
 # JVM custom parameters
 es_jvm_custom_parameters: ''
