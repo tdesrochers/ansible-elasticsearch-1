@@ -1,4 +1,5 @@
 ---
+es_instance_name: "{{ ansible_hostname }}"
 es_major_version: "5.x"
 es_version: "5.2.2"
 es_version_lock: false
