@@ -10,8 +10,8 @@
   when: es_use_repository
 
 - name: Debian - Add Elasticsearch repository key
-  apt_key: url="{{ es_apt_key }}" state=present
-  when: es_use_repository and es_apt_key
+  apt_key: url="{{ es_gpg_key }}" state=present
+  when: es_use_repository and es_gpg_key
 
 - name: Debian - Add elasticsearch repository
   apt_repository: repo={{ item.repo }} state={{ item.state}}
@@ -25,7 +25,7 @@
   when: es_version_lock
 
 - name: Debian - Ensure elasticsearch is installed
-  apt: name=elasticsearch{% if es_version is defined and es_version != "" %}={{ es_version }}{% endif %} state=present force={{force_install}} allow_unauthenticated={{ 'no' if es_apt_key else 'yes' }} cache_valid_time=86400
+  apt: name=elasticsearch{% if es_version is defined and es_version != "" %}={{ es_version }}{% endif %} state=present force={{force_install}} allow_unauthenticated={{ 'no' if es_gpg_key else 'yes' }} cache_valid_time=86400
   when: es_use_repository
   register: es_install
 

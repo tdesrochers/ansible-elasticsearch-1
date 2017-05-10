@@ -4,9 +4,12 @@ es_major_version: "5.x"
 es_version: "5.2.2"
 es_version_lock: false
 es_use_repository: true
-es_apt_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
-es_apt_url: "deb https://artifacts.elastic.co/packages/{{ es_major_version }}/apt stable main"
-es_apt_url_old: "deb http://packages.elastic.co/elasticsearch/{{ es_major_version }}/debian stable main"
+es_artifacts_url: "https://artifacts.elastic.co"
+es_packages_url: "http://packages.elastic.co"
+es_apt_url: "deb {{ es_artifacts_url }}/packages/{{ es_major_version }}/apt stable main"
+es_apt_url_old: "deb {{ es_packages_url }}/elasticsearch/{{ es_major_version }}/debian stable main"
+es_yum_baseurl: "{{ es_artifacts_url }}/packages/{{ es_major_version }}/yum"
+es_gpg_key: "{{ es_artifacts_url }}/GPG-KEY-elasticsearch"
 es_start_service: true
 es_java_install: true
 update_java: false

@@ -1,8 +1,8 @@
 [elasticsearch-{{ es_major_version }}]
 name=Elasticsearch repository for {{ es_major_version }} packages
-baseurl=https://artifacts.elastic.co/packages/{{ es_major_version }}/yum
+baseurl={{ es_yum_baseurl }}
 gpgcheck=1
-gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+gpgkey={{ es_gpg_key }}
 enabled=1
 {% if es_proxy_host is defined and es_proxy_port is defined %}
 proxy=http://{{ es_proxy_host }}:{{es_proxy_port}}
